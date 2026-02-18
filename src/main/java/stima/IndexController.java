@@ -248,6 +248,10 @@ public class IndexController {
     }
 
     public void onSaveAsTxt(Event event) {
+        if (isOnLiveUpdate) {
+            outputError.setText("Visualisasi sedang berjalan! Tunggu sampai selesai.");
+            return;
+        }
         if (!isSolved) {
             outputError.setText("Selesaikan suatu papan terlebih dahulu untuk menyimpan hasil.");
             return;
@@ -277,12 +281,12 @@ public class IndexController {
     }
 
     public void onSaveAsPng(Event event) {
-        if (!isSolved) {
-            outputError.setText("Selesaikan suatu papan terlebih dahulu untuk menyimpan hasil.");
-            return;
-        }
         if (isOnLiveUpdate) {
             outputError.setText("Visualisasi sedang berjalan! Tunggu sampai selesai.");
+            return;
+        }
+        if (!isSolved) {
+            outputError.setText("Selesaikan suatu papan terlebih dahulu untuk menyimpan hasil.");
             return;
         }
         inputError.setText("");
@@ -329,19 +333,19 @@ public class IndexController {
         }
         inputError.setText("");
         outputError.setText("");
+        outputTextArea.setText("");
 
         Solution solution;
         char[][] inputGrids = getInput();
         if (useVisualization.isSelected()) {
-            solution = Solver.solve(inputGrids, VisualizationOption.Live);
+            Solver.solve(inputGrids, VisualizationOption.Live);
         } else {
             solution = Solver.solve(inputGrids, VisualizationOption.None);
+            outputSolution(solution);
         }
-
-        outputSolution(solution);
     }
 
-    private void outputSolution(Solution solution) {
+    public void outputSolution(Solution solution) {
         isSolved = true;
 
         String outputString = new String();

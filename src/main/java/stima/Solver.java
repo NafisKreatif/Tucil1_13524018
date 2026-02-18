@@ -39,6 +39,7 @@ public class Solver {
         if (option == VisualizationOption.Live) {
             IndexController.instance.liveUpdateThread = new Thread(() -> {
                 IndexController.instance.isOnLiveUpdate = true;
+                long startTime = System.nanoTime();
                 int n = input.length;
                 boolean[] usedColor = new boolean[26];
                 int[] usedColumn = new int[n];
@@ -46,37 +47,43 @@ public class Solver {
                     usedColor[i] = false;
                     usedColumn[i] = -1;
                 }
-                solveRecursive(input, 0, usedColor, usedColumn, option, new StatCount());
+                Solution solution = solveRecursive(input, 0, usedColor, usedColumn, option, new StatCount());
+
+                long endTime = System.nanoTime();
+                solution.time_ms = TimeUnit.NANOSECONDS.toMillis(endTime - startTime);
+                
+                IndexController.instance.outputSolution(solution);
                 IndexController.instance.isOnLiveUpdate = false;
             });
             IndexController.instance.liveUpdateThread.start();
+            return null;
+        } else {
+            long startTime = System.nanoTime();
+            int n = input.length;
+            boolean[] usedColor = new boolean[26];
+            int[] usedColumn = new int[n];
+            for (int i = 0; i < n; i++) {
+                usedColor[i] = false;
+                usedColumn[i] = -1;
+            }
+
+            Solution solution = solveRecursive(input, 0, usedColor, usedColumn, VisualizationOption.None,
+                    new StatCount());
+
+            long endTime = System.nanoTime();
+            solution.time_ms = TimeUnit.NANOSECONDS.toMillis(endTime - startTime);
+
+            if (option == VisualizationOption.None) {
+                tryUpdateGUI(() -> {
+                    if (solution.isSolved)
+                        IndexController.instance.drawBoard(input, solution.grid);
+                    IndexController.instance.setTotalIteration(solution.totalIteration);
+                    IndexController.instance.setTotalCase(solution.totalCase);
+                });
+            }
+
+            return solution;
         }
-
-        // Initialization
-        long startTime = System.nanoTime();
-        int n = input.length;
-        boolean[] usedColor = new boolean[26];
-        int[] usedColumn = new int[n];
-        for (int i = 0; i < n; i++) {
-            usedColor[i] = false;
-            usedColumn[i] = -1;
-        }
-
-        Solution solution = solveRecursive(input, 0, usedColor, usedColumn, VisualizationOption.None, new StatCount());
-
-        long endTime = System.nanoTime();
-        solution.time_ms = TimeUnit.NANOSECONDS.toMillis(endTime - startTime);
-
-        if (option == VisualizationOption.None) {
-            tryUpdateGUI(() -> {
-                if (solution.isSolved)
-                    IndexController.instance.drawBoard(input, solution.grid);
-                IndexController.instance.setTotalIteration(solution.totalIteration);
-                IndexController.instance.setTotalCase(solution.totalCase);
-            });
-        }
-
-        return solution;
     }
 
     private static Solution solveRecursive(char[][] input, int i, boolean[] usedColor, int[] usedColumn,
