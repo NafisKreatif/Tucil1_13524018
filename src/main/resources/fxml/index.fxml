@@ -33,7 +33,7 @@
     <HBox alignment="TOP_CENTER" spacing="30.0">
         <VBox spacing="10.0">
             <Label text="Input"/>
-            <TextArea fx:id="inputTextArea" prefWidth="250.0" minWidth="250.0" minHeight="250.0"/>
+            <TextArea fx:id="inputTextArea" styleClass="monospace" prefWidth="250.0" minWidth="250.0" minHeight="250.0"/>
             <HBox spacing="10.0">
                 <Button fx:id="inputTxt" text="Import .txt file" onAction="#onInputFromFile"/>
             </HBox>
@@ -56,7 +56,7 @@
         </VBox>
         <VBox spacing="10.0">
             <Label text="Output"/>
-            <TextArea fx:id="outputTextArea" prefWidth="250.0" minWidth="250.0" minHeight="250.0"/>
+            <TextArea fx:id="outputTextArea" styleClass="monospace" prefWidth="250.0" minWidth="250.0" minHeight="250.0"/>
             <HBox spacing="10.0">
                 <Button text="Save as .txt" onAction="#onSaveAsTxt"/>
                 <Button text="Save as .png" onAction="#onSaveAsPng"/>

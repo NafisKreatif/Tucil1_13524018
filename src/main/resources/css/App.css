@@ -88,3 +88,8 @@
     font-weight: bold;
     -fx-font-weight: bold;
 }
+
+.monospace {
+    font-family: monospace;
+    -fx-font-family: monospace;
+}
