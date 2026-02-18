@@ -1,0 +1,14 @@
+BCDDDDDD#
+BC#EEEEED
+BCFG#AAED
+BCFGHH#ED
+BCF#GGGED
+BCFFF#FED
+#CCCCCCCC
+BBBBBBC#I
+I#IIIIIII
+
+Solution found.
+Execution time: 0 ms
+Total iteration: 71199
+Total case: 63285
